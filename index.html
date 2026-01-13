@@ -10,9 +10,19 @@
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #0a0f2c, #2b0f3f);
+      background: linear-gradient(135deg, rgba(10,15,44,0.9), rgba(43,15,63,0.9));
       color: #ffffff;
       overflow-x: hidden;
+    }
+
+    canvas#stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
     }
 
     header {
@@ -49,12 +59,46 @@
       border-radius: 18px;
       padding: 30px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      border: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+      z-index: 1;
+      transform-origin: center;
+      overflow: visible;
+    }
+    }
+    }
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+      transform: translateY(-18px) scale(1.06);
+      box-shadow: 0 45px 90px rgba(0,0,0,0.75);
+      z-index: 10;
+    }
+
+    .card:hover .card {
+      transform: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .card .card:hover {
+      transform: translateY(-14px) scale(1.06);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.75);
+      z-index: 20;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0);
+      transition: border-color 0.4s ease;
+      pointer-events: none;
+    }
+
+    .card:hover::after {
+      border-color: rgba(255,255,255,0.9);
     }
 
     .card h2 {
@@ -103,6 +147,7 @@
   </style>
 </head>
 <body>
+<canvas id="stars"></canvas>
 
   <header>
     <img src="LuminexLogo.png" alt="Luminex Studios Logo" style="max-width:220px;margin-bottom:25px;filter:drop-shadow(0 0 25px rgba(127,156,255,0.45));transform:perspective(800px) rotateX(12deg);" />
@@ -181,14 +226,14 @@
       <p>
         Be the first to get updates, sneak peeks, and release announcements for our upcoming game.
       </p>
-      <a href="https://discord.gg/6ahBjC8gpj" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
+      <a href="https://discord.gg/YOURINVITECODE" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
     </div>
   <div class="card" style="grid-column: 1 / -1; text-align:center;">
       <h2>We’re Recruiting</h2>
       <p style="max-width:700px;margin:10px auto 0;">
         Luminex Studio is currently looking for <strong>developers</strong> and <strong>beta testers</strong> to help shape our upcoming games. If you want to be part of the journey, you must join our Discord to apply and stay updated.
       </p>
-      <a href="https://discord.gg/6ahBjC8gpj" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
+      <a href="https://discord.gg/YOURINVITECODE" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
     </div>
   <div class="card" style="grid-column: 1 / -1; text-align:center;">
       <h2>Sneak Peeks</h2>
@@ -211,19 +256,121 @@
     let sneakIndex = 0;
     const sneakTrack = document.getElementById('sneakTrack');
 
-    function updateSneak() {
+    function updateSneak(direction = 1) {
+      sneakTrack.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)';
       sneakTrack.style.transform = `translateX(-${sneakIndex * 100}%)`;
     }
 
     function nextSneak() {
       sneakIndex = (sneakIndex + 1) % 5;
-      updateSneak();
+      updateSneak(1);
     }
 
     function prevSneak() {
       sneakIndex = (sneakIndex - 1 + 5) % 5;
-      updateSneak();
+      updateSneak(-1);
     }
+
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    let mouse = { x: 0, y: 0 };
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    const stars = Array.from({ length: 160 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.6 + 0.4,
+      speed: Math.random() * 0.15 + 0.05,
+      depth: Math.random() * 0.6 + 0.4
+    }));
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('mousedown', e => {
+      clickRipple(e.clientX, e.clientY);
+    });
+
+    function drawStars() {
+      ctx.clearRect(0, 0, w, h);
+
+      stars.forEach(s => {
+        s.y += s.speed * s.depth;
+        if (s.y > h) s.y = 0;
+
+        const dx = mouse.x - s.x;
+        const dy = mouse.y - s.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const pull = Math.min(14 / dist, 2);
+        const ox = dx * pull * s.depth;
+        const oy = dy * pull * s.depth;
+
+        const glow = Math.max(0.3, 1 - dist / 250);
+
+        ctx.beginPath();
+        ctx.arc(s.x + ox, s.y + oy, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,180,255,${glow})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(drawStars);
+    }
+
+    const ripples = [];
+
+    function clickRipple(x, y) {
+      ripples.push({ x, y, r: 0, o: 0.6 });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, w, h);
+
+      stars.forEach(s => {
+        s.y += s.speed * s.depth;
+        if (s.y > h) s.y = 0;
+
+        const dx = mouse.x - s.x;
+        const dy = mouse.y - s.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const pull = Math.min(14 / dist, 2);
+        const ox = dx * pull * s.depth;
+        const oy = dy * pull * s.depth;
+
+        const glow = Math.max(0.3, 1 - dist / 250);
+
+        ctx.beginPath();
+        ctx.arc(s.x + ox, s.y + oy, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,180,255,${glow})`;
+        ctx.fill();
+      });
+
+      ripples.forEach((r, i) => {
+        r.r += 4;
+        r.o -= 0.02;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(190,160,255,${r.o})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        if (r.o <= 0) ripples.splice(i, 1);
+      });
+
+      requestAnimationFrame(drawStars);
+    }
+
+    drawStars();
   </script>
 
   <footer>
