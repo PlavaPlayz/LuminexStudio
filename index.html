@@ -5,33 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Luminex Studios</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       background: linear-gradient(135deg, rgba(10,15,44,0.9), rgba(43,15,63,0.9));
-      color: #ffffff;
+      color: #fff;
       overflow-x: hidden;
     }
 
     canvas#stars {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       z-index: -1;
       pointer-events: none;
     }
 
     header {
-      padding: 80px 20px;
       text-align: center;
+      padding: 90px 20px 70px;
+    }
+
+    header img {
+      max-width: 220px;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 0 25px rgba(127,156,255,0.45));
+      transform: perspective(800px) rotateX(10deg);
     }
 
     header h1 {
-      font-size: 3.5rem;
+      font-size: 3.6rem;
       font-weight: 700;
       background: linear-gradient(90deg, #7f9cff, #c77dff);
       -webkit-background-clip: text;
@@ -47,54 +53,37 @@
     .container {
       max-width: 1200px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 40px 20px 80px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
+      gap: 35px;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      padding: 42px;
       border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
       position: relative;
-      z-index: 1;
-      transform-origin: center;
-      overflow: visible;
-    }
-    }
-    }
-    }
-
-    .card:hover {
-      transform: translateY(-18px) scale(1.06);
-      box-shadow: 0 45px 90px rgba(0,0,0,0.75);
-      z-index: 10;
-    }
-
-    .card:hover .card {
-      transform: none;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .card .card:hover {
-      transform: translateY(-14px) scale(1.06);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.75);
-      z-index: 20;
     }
 
     .card::after {
       content: '';
       position: absolute;
       inset: 0;
-      border-radius: 18px;
+      border-radius: 22px;
       border: 1px solid rgba(255,255,255,0);
-      transition: border-color 0.4s ease;
+      transition: border-color 0.35s ease;
       pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-18px) scale(1.06);
+      box-shadow: 0 45px 90px rgba(0,0,0,0.75);
+      z-index: 5;
     }
 
     .card:hover::after {
@@ -109,33 +98,59 @@
 
     .card p {
       font-size: 0.95rem;
-      line-height: 1.6;
+      line-height: 1.65;
       opacity: 0.9;
     }
 
+    /* OWNERS */
     .owners {
       grid-column: 1 / -1;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
     }
 
     .owner {
-      background: rgba(255,255,255,0.06);
-      border-radius: 18px;
-      padding: 25px;
-      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .owner-pfp {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 18px;
+      display: block;
+      box-shadow: 0 0 35px rgba(127,156,255,0.55);
     }
 
     .owner h3 {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
+      font-size: 1.45rem;
+      margin-bottom: 6px;
       color: #8ab4ff;
     }
 
     .owner span {
       font-size: 0.85rem;
       opacity: 0.8;
+    }
+
+    /* BUTTON */
+    .btn {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 14px 34px;
+      border-radius: 30px;
+      background: linear-gradient(90deg,#7f9cff,#c77dff);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      transition: transform 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
     }
 
     footer {
@@ -147,235 +162,152 @@
   </style>
 </head>
 <body>
+
 <canvas id="stars"></canvas>
 
-  <header>
-    <img src="LuminexLogo.png" alt="Luminex Studios Logo" style="max-width:220px;margin-bottom:25px;filter:drop-shadow(0 0 25px rgba(127,156,255,0.45));transform:perspective(800px) rotateX(12deg);" />
-    <h1>Luminex Studios</h1>
-    <p>Where creativity meets innovation through light, vision, and design.</p>
-  </header>
+<header>
+  <img src="LuminexLogo.png" alt="Luminex Studios Logo">
+  <h1>Luminex Studios</h1>
+  <p>Where creativity meets innovation through light, vision, and design.</p>
+</header>
 
-  <section class="container">
-    <div class="card">
-      <h2>About Luminex Studio</h2>
-      <p><strong>Short:</strong><br>
-        Luminex Studio is a studio built by a group of friends aiming to create the best future games possible across multiple platforms, including Virtual Reality and Roblox.
-      </p>
-      <p style="margin-top:10px;"><strong>Long:</strong><br>
-        Luminex Studio is a Virtual Reality and Roblox company that has been creating games and pushing them toward the top of the industry. Founded by Vision and Slipz at the young ages of 14 and 15, the studio began with a passion for VR and evolved into a full creative studio. Today, Luminex Studio focuses on building future‑ready games driven by creativity, fun, and strong marketing.
-      </p>
-    </div>
+<section class="container">
 
-    <div class="card">
-      <h2>What We Do</h2>
-      <p>
-        Luminex Studios develops immersive <strong>Roblox</strong> and <strong>VR (Meta Quest)</strong> games, blending gameplay innovation with striking visuals. Our projects focus on fun, immersion, and next‑level player experiences.
-      </p>
-    </div>
+  <div class="card">
+    <h2>About Luminex Studio</h2>
+    <p><strong>Short:</strong><br>
+      Luminex Studio is a studio built by a group of friends aiming to create the best future games possible across Virtual Reality and Roblox.
+    </p>
+    <p style="margin-top:12px;"><strong>Long:</strong><br>
+      Luminex Studio is a VR and Roblox company founded by Vision and Slipz at the ages of 14 and 15. What started as a passion project evolved into a full studio focused on creativity, innovation, and unforgettable player experiences.
+    </p>
+  </div>
 
-    <div class="card">
-      <h2>Our Vision</h2>
-      <p>
-        Our vision is to push boundaries in both Roblox and VR gaming. With our first major game nearing release, we aim to deliver unforgettable experiences that players can truly step into.
-      </p>
-    </div>
+  <div class="card">
+    <h2>What We Do</h2>
+    <p>
+      We develop immersive <strong>Roblox</strong> and <strong>VR (Meta Quest)</strong> games, blending unique mechanics, creative worlds, and strong community-driven design.
+    </p>
+  </div>
 
-    <div class="card" style="grid-column: 1 / -1;">
-      <h2>Our Games</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;margin-top:20px;">
-        <div class="card" style="text-align:center;">
-          <h3 style="color:#8ab4ff;margin-bottom:12px;">Monker</h3>
-          <img src="Monker.png" alt="Monker VR Game" style="width:100%;max-width:260px;border-radius:16px;box-shadow:0 0 30px rgba(127,156,255,0.35);" />
-          <p style="margin-top:14px;font-size:0.9rem;opacity:0.9;">
-            <strong>VR (Meta Quest)</strong><br>
-            Monker is a fangame based on Gorilla Tag where you can explore maps, play with friends, and chase each other while having fun across multiple game modes. Available on the Meta Store.
-          </p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <h3 style="color:#caa9ff;margin-bottom:12px;">Scary Baboon Revamp Redux</h3>
-          <img src="ScaryBaboonRedux.png" alt="Scary Baboon Revamp Redux Roblox Game" style="width:100%;max-width:260px;border-radius:16px;box-shadow:0 0 30px rgba(199,125,255,0.35);" />
-          <p style="margin-top:14px;font-size:0.9rem;opacity:0.9;">
-            <strong>Roblox</strong><br>
-            A fangame inspired by Scary Baboon, rebuilt inside Roblox. Play both Lab and Revamp versions in third-person, bringing the Scary Baboon experience to Roblox.
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="card">
+    <h2>Our Vision</h2>
+    <p>
+      With our first major games nearing release, our mission is to push boundaries, stand out in the industry, and deliver fun, memorable experiences across platforms.
+    </p>
+  </div>
 
-    <div class="owners">
-      <div class="owner" style="text-align:center;">
-        <img src="SlipzPFP.png" alt="Slipz Profile Picture" style="width:120px;height:120px;border-radius:50%;margin-bottom:15px;box-shadow:0 0 25px rgba(127,156,255,0.4);" />
-        <h3>Slipz</h3>
-        <span>Founder</span>
-        <p style="margin-top:10px;">
-          Slipz is the founder of Luminex Studio and leads the creative direction, game concepts, and overall studio vision. He focuses on crafting immersive worlds and memorable gameplay experiences.
+  <div class="card" style="grid-column:1/-1;">
+    <h2>Our Games</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;margin-top:20px;">
+
+      <div class="card" style="text-align:center;">
+        <h3 style="color:#8ab4ff;margin-bottom:12px;">Monker</h3>
+        <img src="Monker.png" style="width:100%;max-width:260px;border-radius:16px;box-shadow:0 0 30px rgba(127,156,255,0.35);">
+        <p style="margin-top:14px;font-size:0.9rem;">
+          <strong>VR (Meta Quest)</strong><br>
+          A Gorilla Tag–inspired fangame where players explore maps, chase friends, and enjoy multiple game modes.
         </p>
       </div>
 
-      <div class="owner" style="text-align:center;">
-        <img src="VisionPFP.png" alt="Vision Profile Picture" style="width:120px;height:120px;border-radius:50%;margin-bottom:15px;box-shadow:0 0 25px rgba(199,125,255,0.4);" />
-        <h3>Vision</h3>
-        <span>Founder</span>
-        <p style="margin-top:10px;">
-          Hey! I'm Vision. One of the founders of Luminex Studio. My goal is to bring our games to the top and make them rocket through the industry by pushing innovation, quality, and creativity.
+      <div class="card" style="text-align:center;">
+        <h3 style="color:#caa9ff;margin-bottom:12px;">Scary Baboon Redux</h3>
+        <img src="ScaryBaboonRedux.png" style="width:100%;max-width:260px;border-radius:16px;box-shadow:0 0 30px rgba(199,125,255,0.35);">
+        <p style="margin-top:14px;font-size:0.9rem;">
+          <strong>Roblox</strong><br>
+          A Scary Baboon–inspired experience rebuilt inside Roblox with Lab and Revamp gameplay in third-person.
         </p>
       </div>
+
     </div>
-  <div class="card" style="grid-column: 1 / -1; text-align: center;">
-      <h2>Join Our Community</h2>
-      <p>
-        Be the first to get updates, sneak peeks, and release announcements for our upcoming game.
+  </div>
+
+  <div class="owners">
+
+    <div class="card owner">
+      <img src="SlipzPFP.png" alt="Slipz" class="owner-pfp">
+      <h3>Slipz</h3>
+      <span>Founder</span>
+      <p style="margin-top:14px;">
+        Slipz is the founder of Luminex Studio, leading creative direction, game concepts, and overall studio growth.
       </p>
-      <a href="https://discord.gg/YOURINVITECODE" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
     </div>
-  <div class="card" style="grid-column: 1 / -1; text-align:center;">
-      <h2>We’re Recruiting</h2>
-      <p style="max-width:700px;margin:10px auto 0;">
-        Luminex Studio is currently looking for <strong>developers</strong> and <strong>beta testers</strong> to help shape our upcoming games. If you want to be part of the journey, you must join our Discord to apply and stay updated.
+
+    <div class="card owner">
+      <img src="VisionPFP.png" alt="Vision" class="owner-pfp">
+      <h3>Vision</h3>
+      <span>Founder</span>
+      <p style="margin-top:14px;">
+        Hey! I'm Vision. One of the founders of Luminex Studio. My goal is to bring our games to the top and make them rocket through the industry.
       </p>
-      <a href="https://discord.gg/YOURINVITECODE" target="_blank" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:30px;background:linear-gradient(90deg,#7f9cff,#c77dff);color:#fff;text-decoration:none;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.35);transition:transform 0.2s ease;">Join Our Discord</a>
     </div>
-  <div class="card" style="grid-column: 1 / -1; text-align:center;">
-      <h2>Sneak Peeks</h2>
-      <p style="opacity:0.85;margin-bottom:20px;">Take a look at early visuals from our upcoming projects.</p>
-      <div style="position:relative;max-width:420px;margin:0 auto;overflow:hidden;">
-        <button onclick="prevSneak()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:none;color:white;font-size:1.8rem;border-radius:50%;width:44px;height:44px;cursor:pointer;z-index:2;">‹</button>
-        <div id="sneakTrack" style="display:flex;transition:transform 0.6s ease;">
-          <img src="sneakpeak1.png" style="width:100%;flex-shrink:0;border-radius:18px;box-shadow:0 0 35px rgba(127,156,255,0.4);" />
-          <img src="sneakpeak2.png" style="width:100%;flex-shrink:0;border-radius:18px;box-shadow:0 0 35px rgba(127,156,255,0.4);" />
-          <img src="sneakpeak3.png" style="width:100%;flex-shrink:0;border-radius:18px;box-shadow:0 0 35px rgba(127,156,255,0.4);" />
-          <img src="sneakpeak4.png" style="width:100%;flex-shrink:0;border-radius:18px;box-shadow:0 0 35px rgba(127,156,255,0.4);" />
-          <img src="sneakpeak5.png" style="width:100%;flex-shrink:0;border-radius:18px;box-shadow:0 0 35px rgba(127,156,255,0.4);" />
-        </div>
-        <button onclick="nextSneak()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:none;color:white;font-size:1.8rem;border-radius:50%;width:44px;height:44px;cursor:pointer;z-index:2;">›</button>
-      </div>
-    </div>
-  </section>
 
-  <script>
-    let sneakIndex = 0;
-    const sneakTrack = document.getElementById('sneakTrack');
+  </div>
 
-    function updateSneak(direction = 1) {
-      sneakTrack.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)';
-      sneakTrack.style.transform = `translateX(-${sneakIndex * 100}%)`;
-    }
+  <div class="card" style="grid-column:1/-1;text-align:center;">
+    <h2>Join Our Community</h2>
+    <p>Get sneak peeks, updates, and announcements by joining our Discord.</p>
+    <a class="btn" href="https://discord.gg/39ZeGEwVc7" target="_blank">Join Our Discord</a>
+  </div>
 
-    function nextSneak() {
-      sneakIndex = (sneakIndex + 1) % 5;
-      updateSneak(1);
-    }
+  <div class="card" style="grid-column:1/-1;text-align:center;">
+    <h2>We're Recruiting</h2>
+    <p style="max-width:700px;margin:10px auto 0;">
+      We are looking for <strong>developers</strong> and <strong>beta testers</strong>. Join our Discord to apply and be part of the journey.
+    </p>
+    <a class="btn" href="https://discord.gg/39ZeGEwVc7" target="_blank">Apply on Discord</a>
+  </div>
 
-    function prevSneak() {
-      sneakIndex = (sneakIndex - 1 + 5) % 5;
-      updateSneak(-1);
-    }
+</section>
 
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    let mouse = { x: 0, y: 0 };
+<footer>
+  © 2026 Luminex Studios. All rights reserved.
+</footer>
 
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  const mouse = { x: 0, y: 0 };
 
-    window.addEventListener('resize', resize);
-    resize();
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
 
-    const stars = Array.from({ length: 160 }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.6 + 0.4,
-      speed: Math.random() * 0.15 + 0.05,
-      depth: Math.random() * 0.6 + 0.4
-    }));
+  const stars = Array.from({ length: 160 }, () => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 1.6 + 0.4,
+    speed: Math.random() * 0.15 + 0.05,
+    depth: Math.random() * 0.6 + 0.4
+  }));
 
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    stars.forEach(s => {
+      s.y += s.speed * s.depth;
+      if (s.y > h) s.y = 0;
+      const dx = mouse.x - s.x;
+      const dy = mouse.y - s.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const pull = Math.min(14 / dist, 2);
+      ctx.beginPath();
+      ctx.arc(s.x + dx * pull * s.depth, s.y + dy * pull * s.depth, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,180,255,0.9)';
+      ctx.fill();
     });
-
-    window.addEventListener('mousedown', e => {
-      clickRipple(e.clientX, e.clientY);
-    });
-
-    function drawStars() {
-      ctx.clearRect(0, 0, w, h);
-
-      stars.forEach(s => {
-        s.y += s.speed * s.depth;
-        if (s.y > h) s.y = 0;
-
-        const dx = mouse.x - s.x;
-        const dy = mouse.y - s.y;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-
-        const pull = Math.min(14 / dist, 2);
-        const ox = dx * pull * s.depth;
-        const oy = dy * pull * s.depth;
-
-        const glow = Math.max(0.3, 1 - dist / 250);
-
-        ctx.beginPath();
-        ctx.arc(s.x + ox, s.y + oy, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,180,255,${glow})`;
-        ctx.fill();
-      });
-
-      requestAnimationFrame(drawStars);
-    }
-
-    const ripples = [];
-
-    function clickRipple(x, y) {
-      ripples.push({ x, y, r: 0, o: 0.6 });
-    }
-
-    function drawStars() {
-      ctx.clearRect(0, 0, w, h);
-
-      stars.forEach(s => {
-        s.y += s.speed * s.depth;
-        if (s.y > h) s.y = 0;
-
-        const dx = mouse.x - s.x;
-        const dy = mouse.y - s.y;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-
-        const pull = Math.min(14 / dist, 2);
-        const ox = dx * pull * s.depth;
-        const oy = dy * pull * s.depth;
-
-        const glow = Math.max(0.3, 1 - dist / 250);
-
-        ctx.beginPath();
-        ctx.arc(s.x + ox, s.y + oy, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,180,255,${glow})`;
-        ctx.fill();
-      });
-
-      ripples.forEach((r, i) => {
-        r.r += 4;
-        r.o -= 0.02;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(190,160,255,${r.o})`;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        if (r.o <= 0) ripples.splice(i, 1);
-      });
-
-      requestAnimationFrame(drawStars);
-    }
-
-    drawStars();
-  </script>
-
-  <footer>
-    © 2026 Luminex Studios. All rights reserved.
-  </footer>
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
 
 </body>
 </html>
